@@ -10,12 +10,23 @@ import (
 	"strings"
 )
 
+type WProduct struct {
+	PageType string
+	Ptype []string
+	Pbrand string
+	ProdID []uint
+	Value []string
+	Discount string
+	Delivery string
+}
+
 type Product struct {
 	Name string
-	Price string
 	Brand string
-	ProdID string
+	ID uint
+	Price uint
 	Discount string
+	Delivery string
 }
 
 func main() {
@@ -34,16 +45,19 @@ func parseMovies(g *geziyor.Geziyor, r *client.Response) {
 	result := reProductType.Find(r.Body)
 	jsonData := strings.Replace(string(result), "google_tag_params = ", "", 1)
 
-	p := Product{}
-	json.Unmarshal([]byte(jsonData), &p)
+	wp := WProduct{}
 
-	/*pr := Product{
-		Name: string(reProductType.Find(r.Body)),
-		Brand: string(reBrand.Find(r.Body)),
-		Price: string(rePrice.Find(r.Body)),
-		ID: string(reID.Find(r.Body)),
-		Discount: string(reDiscount.Find(r.Body)),
-	}*/
+	json.Unmarshal([]byte(jsonData), &wp)
+
+	p := Product{
+		Name: wp.Ptype[0],
+		Brand: wp.Pbrand,
+		ID: wp.ProdID[0],
+		Discount: wp.Discount,
+		Delivery: wp.Delivery,
+		Price: string(wp.Value[0]),
+	}
+
 
 	fmt.Println(p)
 }
