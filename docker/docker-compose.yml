@@ -18,10 +18,12 @@ services:
     ports:
       - 9910:80
     volumes:
-      - ../:/go/src/spider
+      - ../:/go/src/app
     links:
       - clickdb
       - db
+    working_dir: /go/src/app
+    command: go run main.go
 
   db:
     image: wodby/postgres:12

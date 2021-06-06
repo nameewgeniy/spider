@@ -1,7 +1,4 @@
 FROM golang:latest
 
-WORKDIR /go/src/spider
+WORKDIR /go/src/app
 
-RUN go build main.go
-
-ENTRYPOINT ["go", "run main.go"]

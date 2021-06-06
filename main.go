@@ -18,19 +18,19 @@ import (
 
 type WProduct struct {
 	PageType string
-	Ptype []string
-	Pbrand string
-	ProdID []uint
-	Value []string
+	Ptype    []string
+	Pbrand   string
+	ProdID   []uint
+	Value    []string
 	Discount string
 	Delivery string
 }
 
 type Product struct {
-	Name string
-	Brand string
-	ID uint
-	Price uint
+	Name     string
+	Brand    string
+	ID       uint
+	Price    uint
 	Discount string
 	Delivery string
 }
@@ -88,14 +88,13 @@ func parseMovies(g *geziyor.Geziyor, r *client.Response) {
 	price, _ := strconv.Atoi(wp.Value[0])
 
 	p := Product{
-		Name: wp.Ptype[0],
-		Brand: wp.Pbrand,
-		ID: wp.ProdID[0],
+		Name:     wp.Ptype[0],
+		Brand:    wp.Pbrand,
+		ID:       wp.ProdID[0],
 		Discount: wp.Discount,
 		Delivery: wp.Delivery,
-		Price:  uint(price),
+		Price:    uint(price),
 	}
-
 
 	fmt.Println(p)
 }
