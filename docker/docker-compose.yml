@@ -1,40 +1,20 @@
 version: "3"
 services:
 
-  clickdb:
-    image: yandex/clickhouse-server
-    container_name: "spider_db"
-    environment:
-      POSTGRES_MULTIPLE_DATABASES: ad_db,ad_db_test
+  browser:
+    image: chromedp/headless-shell
+    container_name: "browser"
     ports:
-      - 9900:9000
-      - 8123:8123
-    volumes:
-      - ./clickhouse:/docker-entrypoint-initdb.d
+      - 9000:9222
 
   go:
-    build: ./go
+    build:
+      dockerfile: ./docker/go/Dockerfile
+      context: ../.
     container_name: "spider_go"
     ports:
       - 9910:80
     volumes:
       - ../:/go/src/app
-    links:
-      - clickdb
-      - db
-    working_dir: /go/src/app
-    command: go run main.go
-
-  db:
-    image: wodby/postgres:12
-    container_name: "spider_postgres"
-    stop_grace_period: 30s
-    environment:
-      POSTGRES_PASSWORD: ad_password
-      POSTGRES_USER: ad_user
-      POSTGRES_MULTIPLE_DATABASES: ad_db,ad_db_test
-    ports:
-      - 9920:5432
-    volumes:
-      - ./postgres:/docker-entrypoint-initdb.d
-      - ../../postgresql/spider:/var/lib/postgresql/data
+    depends_on:
+      - browser
