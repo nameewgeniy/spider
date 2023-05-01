@@ -12,7 +12,7 @@ WORKDIR /go/src/service
 COPY . .
 
 RUN go mod download && \
-    go build --ldflags "-s -v -w" -o ./bin/application .
+    go build --ldflags "-s -v -w" -o ./bin/application ./cmd/
 
 FROM alpine:latest
 WORKDIR /app

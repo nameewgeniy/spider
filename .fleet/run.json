@@ -1,0 +1,14 @@
+{
+    "configurations": [
+        {
+            "name": "go build spider/cmd",
+            "type": "go",
+            "goExecPath": "$USER_HOME$/.go/bin/go",
+            "buildParams": ["spider/cmd"],
+            "environment": {
+                "CHROMEDP_HOST": "http://localhost:9222"        
+            },
+        },   
+    ]
+}
+
