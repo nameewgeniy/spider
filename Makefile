@@ -1,5 +1,5 @@
 run:
-	@node cmd/app.js
+	@node --watch app/app.js
 
 d.build: 
 	@docker build -f build/Dockerfile . -t spider

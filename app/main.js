@@ -15,7 +15,7 @@ puppeteer.use(AdblockerPlugin({ blockTrackers: true }))
 puppeteer.launch({
   bindAddress: "0.0.0.0",
   args: [
-    "--headless",
+    "--headless", 
     "--no-sandbox",
     "--disable-gpu",
     "--disable-dev-shm-usage",
