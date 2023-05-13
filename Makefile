@@ -1,4 +1,5 @@
 run:
+	@docker-compose -f build/docker-compose.yaml up -d
 	@node --watch app/app.js
 
 d.build: 
