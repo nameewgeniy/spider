@@ -1,6 +1,6 @@
 run:
 	@docker-compose -f build/docker-compose.yaml up -d
-	@node --watch app/app.js
+	@node --watch app/main.js
 
 d.build: 
 	@docker build -f build/Dockerfile . -t spider

@@ -9,16 +9,11 @@ export class Kafka {
     }
     
     async consume(args, func){
-
-        this.consumer = this.kafka.consumer({ groupId: args.groupId })
-        await this.consumer.connect()
-        await this.consumer.subscribe({ topic: args.topic, fromBeginning: true })
-        await this.consumer.run({
-            eachMessage: async ({ topic, partition, message }) => {
-                console.log({
-                    value: message.value.toString(),
-                })
-            },
+        const consumer = this.kafka.consumer({ groupId: args.groupId })
+        await consumer.connect()
+        await consumer.subscribe({ topic: args.topic, fromBeginning: true })
+        await consumer.run({
+            eachMessage: async ({ topic, partition, message }) => func(message),
         })
     } 
 }

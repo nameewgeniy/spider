@@ -1,32 +1,25 @@
-import { Parser } from './parser.js';
-import { Kafka } from "./kafka.js";
-import express from 'express';
-import dotenv from 'dotenv';
+import {parse} from "dotenv";
 
-dotenv.config()
+export class App {
+  constructor(kafka, parser){
+    this.kafka = kafka
+    this.parser = parser
+  }
 
-const port = process.env.PORT || 3000
-const app = express()
-const parser = new Parser()
-const kf = new Kafka()
+  async run() {
+    console.log('service run')
 
-await kf.consume()
+    await this.consume()
+  }
 
-app.get('/:domain', async (req, res) => {
+  async consume() {
+    await this.kafka.consume({topic: 'urls', groupId: 'spider'}, async (message) => {
+      const content = await this.parser.parse(message.value.toString())
+      console.log(content)
+    })
+  }
 
-  (await parser.openBrowser())
-
-  await parser.parse('http://mk.ru')
-  console.log(parser.getContent())
-
-  await parser.parse('http://ya.ru')
-  console.log(parser.getContent())
-
-  res.send(parser.getContent())
-
-  await parser.closeBrowser()
-})
-
-app.listen(port, () => {
-  console.log(`Example app listening on port ${port}`)
-})
+  parse(url) {
+    this.parser.parse(url)
+  }
+}
