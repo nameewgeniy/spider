@@ -1,9 +1,10 @@
 import {parse} from "dotenv";
 
 export class App {
-  constructor(kafka, parser){
+  constructor(kafka, parser, repository){
     this.kafka = kafka
     this.parser = parser
+    this.repository = repository
   }
 
   async run() {
@@ -15,7 +16,7 @@ export class App {
   async consume() {
     await this.kafka.consume({topic: 'urls', groupId: 'spider'}, async (message) => {
       const content = await this.parser.parse(message.value.toString())
-      console.log(content)
+      this.repository.create(content)
     })
   }
 
