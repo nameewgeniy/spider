@@ -1,10 +1,11 @@
 import { Kafka as Kafkajs } from 'kafkajs' 
 
 export class Kafka {
-    constructor(){
+    private kafka: Kafkajs;
+    constructor(brokers: string[]){
         this.kafka = new Kafkajs({
             clientId: 'spider',
-            brokers: ['localhost:9093'],
+            brokers: brokers,
         })
     }
     
