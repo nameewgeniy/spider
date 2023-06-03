@@ -11,6 +11,12 @@ export class MongoRepository {
     }
 
     create(data) {
+        const collection = this.db.collection('sites');
+
+        const query = { name: "Deli Llama" };
+        const update = { $set: { name: "Deli Llama", address: "3 Nassau St" }};
+        const options = { upsert: true };
+        myColl.updateOne(query, update, options);
         console.log('create in mongo')
     }
 }
