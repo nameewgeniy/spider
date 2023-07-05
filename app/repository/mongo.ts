@@ -20,7 +20,7 @@ export class MongoRepository {
     async create(site: Site) {
         const filter = { page: site.page };
         const option = { upsert: true };
-        return await this.siteCollection.updateOne(filter, { $set: site }, option);
+        return await this.siteCollection.update One(filter, { $set: site }, option);
     }
 
     async find(site: Site): Promise<Site> {

@@ -14,7 +14,7 @@ type Conf = {
 
 const cf: Conf = {
     mongoUrl: process.env.MONGO_URL,
-    kafkaHost: process.env.KAFKA_HOST
+    kafkaHost: process.env.KAFKA_SERVERS
 }
 // const port = process.env.PORT || 3000
 const parser = new Parser()
