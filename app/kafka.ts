@@ -1,4 +1,4 @@
-import { Kafka as Kafkajs } from 'kafkajs' 
+import { Kafka as Kafkajs, Message } from 'kafkajs'
 
 export class Kafka {
     private kafka: Kafkajs;
@@ -18,7 +18,7 @@ export class Kafka {
         })
     }
 
-    async producer(messages: object[]) {
+    async producer(messages: Message[]) {
         const producer = this.kafka.producer({
             allowAutoTopicCreation: true,
             transactionTimeout: 30000

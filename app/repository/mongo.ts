@@ -24,9 +24,7 @@ export class MongoRepository {
     }
 
     async find(site: Site): Promise<Site> {
-        const collection: Collection<Site> = this.db.collection('sites');
-
-        return await collection.findOne(site)
+        return await this.siteCollection.findOne(site)
     }
 
     async drop() {

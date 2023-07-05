@@ -2,6 +2,7 @@ import {Kafka} from "./kafka";
 import {Parser} from "./parser";
 import {MongoRepository} from "./repository/mongo";
 import {Site} from "./repository/site.type";
+import {logLevel} from "kafkajs";
 
 export class App {
     private kafka: Kafka;
@@ -36,7 +37,7 @@ export class App {
             const res = await this.repository.create(site)
 
             await this.kafka.producer([
-                { id: res._id.toString() }
+              { key: res.upsertedId.toHexString(), value: JSON.stringify({ id: res.upsertedId.toHexString() }) }
             ])
         })
     }
