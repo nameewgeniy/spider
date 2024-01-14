@@ -2,23 +2,27 @@ import {Kafka} from "./kafka";
 import {Parser} from "./parser";
 import {MongoRepository} from "./repository/mongo";
 import {Site} from "./repository/site.type";
-import {logLevel} from "kafkajs";
+import { Server } from './server'
 
 export class App {
     private kafka: Kafka;
     private parser: Parser
     private repository: MongoRepository
+    private server: Server;
 
-    constructor(kafka: Kafka, parser: Parser, repository: MongoRepository) {
+    constructor(server: Server, kafka: Kafka, parser: Parser, repository: MongoRepository) {
         this.kafka = kafka
         this.parser = parser
         this.repository = repository
+        this.server = server
     }
 
     async run() {
-        console.log('service run')
+        console.log('Service is running');
 
-        await this.consume()
+        // await this.consume();
+        this.server.listen();
+
     }
 
     async consume() {

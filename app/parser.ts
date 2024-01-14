@@ -35,4 +35,5 @@ export class Parser {
 
         return content
     }
+
 }
