@@ -10,11 +10,11 @@ export class MongoRepository {
 
 
     constructor(client){
-        this.client = client
-        this.db = this.client.db(this.dbName)
-        this.siteCollection = this.db.collection('sites');
-
-        this.siteCollection.createIndex({page: 1}, {unique: true}).then(r => console.log('Index created'));
+        // this.client = client
+        // this.db = this.client.db(this.dbName)
+        // this.siteCollection = this.db.collection('sites');
+        //
+        // this.siteCollection.createIndex({page: 1}, {unique: true}).then(r => console.log('Index created'));
     }
 
     async create(site: Site) {

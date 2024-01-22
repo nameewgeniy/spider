@@ -1,12 +1,13 @@
-import {MongoRepository} from "./repository/mongo";
 import axios from 'axios';
+import {MongoRepository} from "../repository/mongo";
 
-export class Ai {
+export class Yandex implements AiInterface{
     private repository: MongoRepository
     private aiToken: string = "y0_AgAAAAAIecY2AATuwQAAAAD3KsSgSJEZ3B2ySpWW6e2PS5jJjPnHSZc"
     private folder: string = "b1g23us4o7uhmq1tctfl"
     private apiUrlCompletion: string = "https://llm.api.cloud.yandex.net/foundationModels/v1/completion"
     private modelUri: string = "gpt://b1g23us4o7uhmq1tctfl/yandexgpt-lite"
+    private tempToken: string = ""
 
 
     constructor(repository: MongoRepository) {
@@ -43,49 +44,45 @@ export class Ai {
         try {
             const response = await this.sendRequest(
                 text,
-                "Определи подходящие категории для текста одним словом на английском языке."
+                "You can identify five suitable short category names for the text, answer only in English words separated by commas."
+
             );
 
             return response.data.result.alternatives[0].message.text
         } catch (error) {
             // обработка ошибки
             console.error('Error while category:', error);
-            return null;
+            return error;
         }
     }
 
     async keywords(text: string) {
+
         try {
             const response = await this.sendRequest(
                 text,
-                "Определи ключевое слово для текста исключая имена и фамии людей, отвечай одним словом"
+                "You can identify five key words for the text, excluding first names, last names of people and numbers, answer only in words separated by commas."
             );
 
-            return response.data.result.alternatives[0].message.text;
+            return response?.data?.result.alternatives[0].message.text;
         } catch (error) {
             // обработка ошибки
             console.error('Error while category:', error);
-            return null;
+            return error;
         }
     }
 
-    async tonal(text: string, type: string) {
+    async tonal(text: string) {
         try {
-            let types = {
-                negative: "негативной",
-                neutral: "нейтральной",
-                positive: "позитивной",
-            }
             const response = await this.sendRequest(
                 text,
-                "Определи вероятность " + types[type]+ " тональности текста одним числом",
+                "Ты умеешь определять тональность текста по трём критериям: позитивный, негативный, нейтральный указывая для каждого критерияпроцент, отвечай в формате \"positive:0.5\", \"negative:0.1\", \"neutral:0.5\""
             );
-
-            return response.data.result.alternatives[0].message.text
+            return response?.data?.result.alternatives[0].message.text
         } catch (error) {
             // обработка ошибки
             console.error('Error while category:', error);
-            return null;
+            return error;
         }
     }
 
@@ -94,9 +91,18 @@ export class Ai {
             yandexPassportOauthToken: token
         };
 
+        if (this.tempToken != "") {
+            return this.tempToken
+        }
+
         try {
             const response = await axios.post('https://iam.api.cloud.yandex.net/iam/v1/tokens', requestBody);
-            return response.data.iamToken;
+
+            if (response.data.iamToken) {
+                this.tempToken = response.data.iamToken
+            }
+
+            return this.tempToken;
         } catch (error) {
             // обработка ошибки
             console.error('Error while getting token:', error);
@@ -136,11 +142,12 @@ export class Ai {
         };
 
         try {
+            await this.sleep(1000)
             return await axios.post(this.apiUrlCompletion, body, config);
         } catch (error) {
             // обработка ошибки
             console.error('Error while tokenizing:', error);
-            return null;
+            return error;
         }
     }
 
@@ -157,4 +164,12 @@ export class Ai {
             return null;
         }
     }
+
+    private sleep(ms): Promise<any> {
+        return new Promise((resolve) => {
+            setTimeout(resolve, ms);
+        });
+    }
+
+
 }
