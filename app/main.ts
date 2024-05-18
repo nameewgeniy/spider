@@ -5,7 +5,7 @@ import {Parser} from "./parser.js";
 import { MongoClient } from 'mongodb'
 import {MongoRepository} from "./repository/mongo.js";
 import { Server } from './server.js'
-import {Gemini} from "./ai/Gemeni.js";
+import {OpenAi} from "./ai/OpenAi.js";
 
 dotenv.config()
 
@@ -28,7 +28,7 @@ const mongo = new MongoClient(cf.mongoUrl)
 // @ts-ignore
 // const client = await mongo.connect();
 const repo = new MongoRepository("")
-const ai = new Gemini("AIzaSyADmAOShFf4F4xWy9kyiq9I4MxKl3u1gcg", repo)
+const ai = new OpenAi("sk-4GPJbIRk60vuJ2o8E5Q5h7nFh4P8iCCB", repo)
 const server = new Server(parser, repo, ai)
 
 const app = new App(server, kafka, parser, repo);
